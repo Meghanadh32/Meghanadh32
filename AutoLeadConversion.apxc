@@ -1,0 +1,51 @@
+public class LeadConversionHandler {
+		public void leadConversionMethod(List<Lead> lstLead)
+		{
+			List<Contact> lstContact = new List<Contact>();
+			List<Account> lstAccount = new List<Account>();
+			system.debug('Trigger Content' +lstLead);
+			
+			if(!lstLead.isEmpty())
+			{
+				for(Lead objLead :lstLead)
+				{
+					if(objLead.Status == 'closed-converted');
+					{
+						Account objAccount = new Account();
+						objAccount.Name = objLead.Company;
+						lstAccount.add(objAccount);
+						
+						Contact objContact = new Contact();
+						objContact.FirstName = objLead.FirstName;
+						objContact.LastName = objLead.LastName;
+						objContact.Email = objLead.Email;
+						lstContact.add(objContact);
+						system.debug('Contact Object' +lstContact);
+					}
+				}
+				insert lstContact;
+				insert lstAccount;
+				system.debug('list Contact' +lstContact);
+			}
+		}
+		
+}
+
+
+
+
+
+Trigger: 
+
+
+trigger LeadConversionTrigger on Lead(after insert, after update)
+{
+	system.debug('In Trigger');
+	
+	LeadConversionHandler objLeadConversionHandler = new LeadConversionHandler();
+	objLeadConversionHandler.leadConversionMethod(Trigger.new);
+}
+	
+	
+	
+	
